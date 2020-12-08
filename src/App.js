@@ -1,10 +1,18 @@
-import { Container, Flex, Spinner, VStack } from "@chakra-ui/react";
+import { Container, Flex, Spinner, VStack, Button } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Post from "./Components/post";
 import db from "./lib/firebase";
 import Navbar from "./Components/navbar";
+import firebase from 'firebase/app';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+const auth = firebase.auth();
 
 const App = () => {
+
+  // const auth = firebase.auth();
+  const [user] = useAuthState(auth);
+
   const [posts, setPosts] = useState([]);
 
   useEffect(()=>{
@@ -43,17 +51,29 @@ const App = () => {
   }, []);
 
   return (
+
     <>
-    <Navbar/>
-    <Container maxW="md" centerContent p={8}>
-      <VStack spacing={8} w="100%">
-        {posts.map((post)=>(
-          <Post post={post} key={post.id}/>
-        ))}
-      </VStack>
-    </Container>
+      { user? <Navbar/> : null }
+      <Container maxW="md" centerContent p={8}>
+      { user ?<VStack spacing={8} w="100%">
+          {posts.map((post)=>(
+            <Post post={post} key={post.id}/>
+          ))}
+        </VStack> : <SingIn /> }
+      </Container>
     </>
   );
+}
+
+function SingIn() {
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
+
+  return (
+    <Button onClick={ signInWithGoogle }>Sign-in with Google</Button>
+  )
 }
 
 export default App;
