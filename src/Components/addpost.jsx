@@ -14,7 +14,7 @@ import {
     useDisclosure,
   } from "@chakra-ui/react";
   import React, { useState, useEffect } from "react";
-  import db from "../lib/firebase";
+  import db from "../config/firebase";
 
   const AddNewPost = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,8 +26,7 @@ import {
 
       await db.collection("posts").add({
         title,
-        upVotesCount: 0,
-        downVotesCount: 0,
+        votesCount: 0,
         createdAt: date.toUTCString(),
         updatedAt: date.toUTCString(),
       });

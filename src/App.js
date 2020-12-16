@@ -1,16 +1,29 @@
 import { Container, Flex, Spinner, VStack, Button } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Post from "./Components/post";
-import db from "./lib/firebase";
+import db from "./config/firebase";
 import Navbar from "./Components/navbar";
+import Footer from "./Components/footer";
 import firebase from 'firebase/app';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const auth = firebase.auth();
 
-const App = () => {
+function SingIn() {
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
 
-  // const auth = firebase.auth();
+  return (
+    <>
+    <h1 style={{margin: "10%"}}>Tell us what you think, anonymously</h1>
+    <Button onClick={ signInWithGoogle }>Sign-in with Google</Button>
+    </>
+  )
+}
+
+const App = () => {
   const [user] = useAuthState(auth);
 
   const [posts, setPosts] = useState([]);
@@ -52,28 +65,25 @@ const App = () => {
 
   return (
 
-    <>
-      { user? <Navbar/> : null }
-      <Container maxW="md" centerContent p={8}>
-      { user ?<VStack spacing={8} w="100%">
+    <Flex direction={"column"} minH="100vh">
+      <Navbar user={user} />
+      <Container maxW="md" centerContent p={8} minH={"85vh"}>
+      { user
+      ?
+      <VStack spacing={8} w="100%">
           {posts.map((post)=>(
-            <Post post={post} key={post.id}/>
+            <Post post={post} key={post.id} user={user}/>
           ))}
-        </VStack> : <SingIn /> }
+        </VStack>
+        :
+        <SingIn />
+        }
       </Container>
-    </>
+      <Footer />
+      </Flex>
   );
 }
 
-function SingIn() {
-  const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
-  }
 
-  return (
-    <Button onClick={ signInWithGoogle }>Sign-in with Google</Button>
-  )
-}
 
 export default App;

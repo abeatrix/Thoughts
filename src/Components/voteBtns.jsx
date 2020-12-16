@@ -11,21 +11,19 @@ const VoteButtons = ({ post }) => {
 
     const handleClick = async (type) => {
 
-        let upVotesCount = post.upVotesCount;
-        let downVotesCount = post.downVotesCount;
+        let votesCount = post.votesCount;
 
         const date = new Date();
 
         if (type === "upvote") {
-        upVotesCount = upVotesCount + 1;
+            votesCount = votesCount + 1;
         } else {
-        downVotesCount = downVotesCount + 1;
+            votesCount = votesCount - 1;
         }
 
         await db.collection("posts").doc(post.id).set({
         title: post.title,
-        upVotesCount,
-        downVotesCount,
+        votesCount: votesCount,
         createdAt: post.createdAt,
         updatedAt: date.toUTCString(),
         });
@@ -41,11 +39,10 @@ const VoteButtons = ({ post }) => {
             icon={<FiArrowUp />}
             onClick={() => handleClick("upvote")}
             />
-            <Text bg="gray.100" rounded="md" w="100%" p={1}>
-            {post.upVotesCount}
+            <Text bg="gray.100" rounded="md" w="100%" p={1} textAlign={[ 'center' ]}>
+            {post.votesCount}
             </Text>
-        </VStack>
-        <VStack>
+
             <IconButton
             size="lg"
             colorScheme="red"
@@ -53,9 +50,6 @@ const VoteButtons = ({ post }) => {
             icon={<FiArrowDown />}
             onClick={() => handleClick("downvote")}
             />
-            <Text bg="gray.100" rounded="md" w="100%" p={1}>
-            {post.downVotesCount}
-            </Text>
         </VStack>
         </>
     );
