@@ -1,6 +1,8 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Thoughts
+A simple reddit-like forum for registered users to post their thoughts anonymously.
+<div style="width: 100%">
+  <img src="public/demo.png"/>
+</div>
 
 ## Technologies Used
-Firebase, chakra UI
+React, React Icons, Firebase, chakra UI

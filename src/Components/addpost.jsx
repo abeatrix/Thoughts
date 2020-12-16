@@ -38,7 +38,7 @@ import {
     return (
       <>
         <Button onClick={onOpen} colorScheme="blue">
-          Add new post
+          Tell Us
         </Button>
 
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
